@@ -1,0 +1,2 @@
+LIBRARY msound.dll
+EXPORTS mexFunction

@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msound", "msound_msvc2003.vcproj", "{9A32184F-47C6-462A-BD4F-63083BD1B0CD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msound.dll", "msound_msvc2003_dll.vcproj", "{9A32184F-47C6-462A-BD4F-63083BD1B0CC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Debug (without ASIO) = Debug (without ASIO)
+		Release = Release
+		Release (without ASIO) = Release (without ASIO)
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Debug.ActiveCfg = Debug|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Debug.Build.0 = Debug|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Debug (without ASIO).ActiveCfg = Debug (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Debug (without ASIO).Build.0 = Debug (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Release.ActiveCfg = Release|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Release.Build.0 = Release|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Release (without ASIO).ActiveCfg = Release (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CD}.Release (without ASIO).Build.0 = Release (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Debug.ActiveCfg = Debug|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Debug.Build.0 = Debug|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Debug (without ASIO).ActiveCfg = Debug (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Debug (without ASIO).Build.0 = Debug (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Release.ActiveCfg = Release|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Release.Build.0 = Release|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Release (without ASIO).ActiveCfg = Release (without ASIO)|Win32
+		{9A32184F-47C6-462A-BD4F-63083BD1B0CC}.Release (without ASIO).Build.0 = Release (without ASIO)|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
