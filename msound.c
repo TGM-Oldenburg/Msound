@@ -823,7 +823,6 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		/* Pointer used for arbitrary data access. */
 		const double *pdMatlabData     = NULL; /* Matlab double data. */
 		float        *pfPortAudioData  = NULL; /* PortAudio float data. */
-		float       **ppfPortAudioData = NULL; /* PortAudio float data. */
 
 		mwIndex i = 0; /* Just a counter. */
 		mwIndex j = 0; /* Just a counter. */
@@ -897,36 +896,28 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		pdMatlabData = mxGetPr( prhs[1] );
 
 		/* Create buffer for PortAudio data. */
-		ppfPortAudioData = (float**)
-		                   mxCalloc(msound.iChannelsOut              ,
-		                            (mwSize) sizeof(float*)          );
 		 pfPortAudioData = (float* )
 		                   mxCalloc(msound.iChannelsOut*iBlockSizeCur,
 		                            (mwSize) sizeof(float )          );
 
 		/* If the buffer could not be created, issue an error and exit. */
-		if( !pfPortAudioData || !ppfPortAudioData )
+		if( !pfPortAudioData )
 		{
 			/* Something went wrong, so delete all buffers that have
 			 * been created. */
 			if(  pfPortAudioData ) { mxFree(  pfPortAudioData ); }
-			if( ppfPortAudioData ) { mxFree( ppfPortAudioData ); }
 
 			mexErrMsgTxt("Out of memory.");
 			return; /* Unnecessary, but for the sake of consistency ... */
 		}
 
-		/* Generate pointer to pointer array. */
-		ppfPortAudioData[0] = pfPortAudioData;
-		for(i=1; i<msound.iChannelsOut; ++i)
-		{ ppfPortAudioData[i] = ppfPortAudioData[i-1] + iBlockSizeCur; }
-
-
 		/* Convert matlab data to PortAudio format. */
-		for(i=0; i<msound.iChannelsOut; ++i, pdMatlabData+=mrows)
+		for(int c=0; c<msound.iChannelsOut; ++c)
 		{
-			for(j=0; j<mrows; ++j)
-			{ ppfPortAudioData[i][j] = (float) pdMatlabData[j]; }
+			for(int f=0; f<mrows; ++f)
+			{
+                pfPortAudioData[f*msound.iChannelsOut+c] = (float) pdMatlabData[c*iBlockSizeCur+f];
+            }
 		}
 
 		/* Display verbose information on the screen. */
@@ -939,7 +930,7 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		if( msound.pStream )
 		{
 			msound.iPaError = Pa_WriteStream(msound.pStream               ,
-			                                 ppfPortAudioData             ,
+			                                 pfPortAudioData             ,
 			                                 (unsigned long) iBlockSizeCur);
 		}
 
@@ -956,7 +947,6 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 
 		/* Delete the data buffer again. */
 		if(  pfPortAudioData ) { mxFree(  pfPortAudioData ); }
-		if( ppfPortAudioData ) { mxFree( ppfPortAudioData ); }
 
 		/* If an error has occurred, display it and exit. */
 		if( (msound.iPaError != paNoError          )&&
@@ -1060,29 +1050,19 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 
 
 		/* Create buffer for PortAudio data. */
-		ppfPortAudioData = (float**)
-		                   mxCalloc(msound.iChannelsIn              ,
-		                            (mwSize) sizeof(float*)         );
 		 pfPortAudioData = (float* )
 		                   mxCalloc(msound.iChannelsIn*iBlockSizeCur,
 		                            (mwSize) sizeof(float )         );
 
 		/* If the buffer could not be created, issue an error and exit. */
-		if( !pfPortAudioData || !ppfPortAudioData )
+		if( !pfPortAudioData )
 		{
 			/* Something went wrong, so delete all buffers that have
 			 * been created. */
 			if(  pfPortAudioData ) { mxFree(  pfPortAudioData ); }
-			if( ppfPortAudioData ) { mxFree( ppfPortAudioData ); }
 			mexErrMsgTxt("Out of memory?");
 			return; /* Unnecessary, but for the sake of consistency ... */
 		}
-
-		/* Generate pointer to pointer array. */
-		ppfPortAudioData[0] = pfPortAudioData;
-		for(i=1; i<msound.iChannelsIn; ++i)
-		{ ppfPortAudioData[i] = ppfPortAudioData[i-1] + iBlockSizeCur; }
-
 
 		/* Display verbose information on the screen. */
 		if( msound.iVerbose > 1 )
@@ -1092,7 +1072,7 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		if( msound.pStream )
 		{
 			msound.iPaError = Pa_ReadStream(msound.pStream               ,
-			                                ppfPortAudioData             ,
+			                                pfPortAudioData              ,
 			                                (unsigned long) iBlockSizeCur);
 		}
 
@@ -1112,14 +1092,15 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		pdMatlabData = mxGetPr( plhs[0] );
 
 		/* Convert PortAudio data to matlab format */
-		iBlockSizeCur *= msound.iChannelsIn; /* Number of samples. */
-		for(i=0; i<iBlockSizeCur; ++i)
-		{ pdMatlabData[i] = (double) pfPortAudioData[i]; }
+		for(int f=0; f<iBlockSizeCur; ++f) {
+            for(int c=0; c<msound.iChannelsIn; ++c) {
+                pdMatlabData[c*iBlockSizeCur+f] = (double) pfPortAudioData[f*msound.iChannelsIn+c];
+            }
+        }
 
 
 		/* Delete the data buffer again. */
 		if(  pfPortAudioData ) { mxFree(  pfPortAudioData ); }
-		if( ppfPortAudioData ) { mxFree( ppfPortAudioData ); }
 
 		/* If an error has occurred, display it and exit. */
 		if( (msound.iPaError != paNoError        )&&
@@ -1709,7 +1690,7 @@ void msoundOpenRead(int nlhs,       mxArray *plhs[],
 	 *                and converted to the specified format afterwards.
 	 */
 	/* Setup PortAudio to return 32 bit floating point data. */
-	inputParameters.sampleFormat = paFloat32 | paNonInterleaved;
+	inputParameters.sampleFormat = paFloat32;
 
 	/* No host specific stream info, here. */
 	inputParameters.hostApiSpecificStreamInfo = NULL;
@@ -2055,7 +2036,7 @@ void msoundOpenWrite(int nlhs,       mxArray *plhs[],
 	 *                format before it is processed, e.g. played.
 	 */
 	/* Setup PortAudio to accept 32 bit floating point data. */
-	outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
+	outputParameters.sampleFormat = paFloat32;
 
 	/* No host specific stream info, here. */
 	outputParameters.hostApiSpecificStreamInfo = NULL;
@@ -2467,8 +2448,8 @@ void msoundOpenReadWrite(int nlhs,       mxArray *plhs[],
 	 *                in-between.
 	 */
 	/* Setup PortAudio to accept and return 32 bit floating point data. */
-	inputParameters.sampleFormat  = paFloat32 | paNonInterleaved;
-	outputParameters.sampleFormat = paFloat32 | paNonInterleaved;
+	inputParameters.sampleFormat  = paFloat32;
+	outputParameters.sampleFormat = paFloat32;
 
 	/* No host specific stream info, here. */
 	inputParameters.hostApiSpecificStreamInfo  = NULL;
@@ -3004,7 +2985,7 @@ void msoundDeviceInfo(int nlhs,       mxArray *plhs[],
 			pDeviceParametersI->channelCount=pDeviceInfo->maxInputChannels;
 			pDeviceParametersI->device = (PaDeviceIndex) iDevice;
 			pDeviceParametersI->hostApiSpecificStreamInfo = NULL;
-			pDeviceParametersI->sampleFormat = paFloat32 | paNonInterleaved;
+			pDeviceParametersI->sampleFormat = paFloat32;
 			pDeviceParametersI->suggestedLatency =
 			                            pDeviceInfo->defaultLowInputLatency;
 		}
@@ -3016,7 +2997,7 @@ void msoundDeviceInfo(int nlhs,       mxArray *plhs[],
 			pDeviceParametersO->channelCount=pDeviceInfo->maxOutputChannels;
 			pDeviceParametersO->device = (PaDeviceIndex) iDevice;
 			pDeviceParametersO->hostApiSpecificStreamInfo = NULL;
-			pDeviceParametersO->sampleFormat = paFloat32 | paNonInterleaved;
+			pDeviceParametersO->sampleFormat = paFloat32;
 			pDeviceParametersO->suggestedLatency =
 			                           pDeviceInfo->defaultLowOutputLatency;
 		}
@@ -3039,14 +3020,11 @@ void msoundDeviceInfo(int nlhs,       mxArray *plhs[],
 			mxArray *pName = mxCreateString(pDeviceInfo->name);
 			mxArray *pApi  = mxCreateString      (
 			               Pa_GetHostApiInfo(pDeviceInfo->hostApi)->name  );
-			mxArray *pId   = mxCreateScalarDouble( (double)(iDevice+1   ) );
-			mxArray *pIn   = mxCreateScalarDouble(
-			                     (double)(pDeviceInfo->maxInputChannels ) );
-			mxArray *pOut  = mxCreateScalarDouble(
-			                     (double)(pDeviceInfo->maxOutputChannels) );
-			mxArray *pFs   = mxCreateScalarDouble(
-			                     (double)(pDeviceInfo->defaultSampleRate) );
-			mxArray *pFs2  = mxCreateDoubleMatrix(1               ,
+            mxArray *pId   = mxCreateDoubleScalar(iDevice+1   );
+            mxArray *pIn   = mxCreateDoubleScalar(pDeviceInfo->maxInputChannels );
+			mxArray *pOut  = mxCreateDoubleScalar(pDeviceInfo->maxOutputChannels);
+			mxArray *pFs   = mxCreateDoubleScalar(pDeviceInfo->defaultSampleRate);
+            mxArray *pFs2  = mxCreateDoubleMatrix(1               ,
 			                                      iSampleRateCount,
 			                                      mxREAL          );
 			double *pdFs2  = NULL;
