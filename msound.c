@@ -90,8 +90,8 @@
 /*---------------------------------------------------------------------*//**
 \file
 \brief The msound main source code file.
-\version 1.1
-\date 2009-06-11
+\version 1.2
+\date 2011-10-10
 
 This is the actual msound MEX-file source code file. It implements the an
 audio interface using the PortAudio portable audio library which may be
@@ -124,6 +124,9 @@ but msound cannot be guaranteed to be compatible to all versions of PA. - SF
 
 /*------------------------------------------------------------------------//
 History:
+v1.2 (2011-10-10)
++ Added return value for call to "verbose", as a struct.  MH
+
 v1.1 (2009-06-11) <- v1.0.2.3
 + Adapted implementation to be used with the MATLAB 7.7.0.471 (R2008b)
   External Interfaces SDK and Matlab's new 48bit data array structures,
@@ -194,7 +197,7 @@ v1.1 (2009-06-11) <- v1.0.2.3
  *
  *  \see MSOUND_VERSION_STR
  */
-#define MSOUND_VERSION 1.1
+#define MSOUND_VERSION 1.2
 /** @brief The current MSOUND version's date string.
  *
  *  A string containing the current msound version's date in dd-mmm-yyyy
@@ -203,7 +206,7 @@ v1.1 (2009-06-11) <- v1.0.2.3
  *
  *  \see MSOUND_VERSION_STR
  */
-#define MSOUND_VERSION_DATE "11-Jun-2009"
+#define MSOUND_VERSION_DATE "10-Oct-2011"
 /** @brief The current MSOUND version string.
  *
  *  The current MSOUND version string to be displayed on the screen or
@@ -1247,10 +1250,9 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		/* Set verbose mode to specified level or to level 1 by default. */
 		msound.iVerbose = (nrhs > 1) ? (int) mxGetScalar( prhs[1] ) : 1;
 
-		mexPrintf("*** Info (msound):  Set verbose to %s.\n",
-		          (msound.iVerbose ? "on" : "off") );
 		if( msound.iVerbose )
 		{
+		        mexPrintf("*** Info (msound):  Set verbose to %d.\n", msound.iVerbose);
 			mexPrintf(MSOUND_VERBOSE "bIsOpenForReading: %d\n"         ,
 			          msound.bIsOpenForReading                         );
 			mexPrintf(MSOUND_VERBOSE "bIsOpenForWriting: %d\n"         ,
@@ -1269,6 +1271,57 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 			          msound.iBlockSize                                );
 		}
 
+		/* If the struct array is to be returned, create it. */
+		if( nlhs >= 1 )
+		{
+		     /* this functionality added by MH, 10.10.2011:
+			returning the verbose-status */
+		     mxArray *pStructArray = NULL;
+
+		     mxArray *pIsOpenForReading = mxCreateDoubleScalar((double)(msound.bIsOpenForReading ));
+		     mxArray *pIsOpenForWriting = mxCreateDoubleScalar((double)(msound.bIsOpenForWriting ));
+		     mxArray *pIsPaInitialzed   = mxCreateDoubleScalar((double)(msound.bIsPaInitialzed ));
+		     mxArray *pPaError          = mxCreateDoubleScalar((double)(msound.iPaError ));
+		     mxArray *pSampleRate       = mxCreateDoubleScalar((double)(msound.dSampleRate ));
+		     mxArray *pChannelsIn       = mxCreateDoubleScalar((double)(msound.iChannelsIn ));
+		     mxArray *pChannelsOut      = mxCreateDoubleScalar((double)(msound.iChannelsOut ));
+		     mxArray *pBlockSize        = mxCreateDoubleScalar((double)(msound.iBlockSize ));
+
+		     if( !pIsOpenForReading || !pIsOpenForWriting || !pIsPaInitialzed || !pPaError
+			 || !pSampleRate || !pChannelsIn || !pChannelsOut || !pBlockSize )
+		     {
+			  mexErrMsgTxt("Error creating internal buffer.");
+			  return; /* Unnecessary, but for consistency ... */
+		     }
+
+                      /* Create 1x1 struct array to be returned, or return an error in
+		       * case of failure. */
+		     if(!(pStructArray = mxCreateStructMatrix(1,1,0,NULL)) ||
+			(-1 == mxAddField( pStructArray, "IsOpenForReading"  ) ) ||
+			(-1 == mxAddField( pStructArray, "IsOpenForWriting"  ) ) ||
+			(-1 == mxAddField( pStructArray, "IsPaInitialzed"    ) ) ||
+			(-1 == mxAddField( pStructArray, "errPa"  ) ) ||
+			(-1 == mxAddField( pStructArray, "SampleRate"  ) ) ||
+			(-1 == mxAddField( pStructArray, "ChannelsIn"  ) ) ||
+			(-1 == mxAddField( pStructArray, "ChannelsOut" ) ) ||
+			(-1 == mxAddField( pStructArray, "BlockSize" ) ) )
+		     {
+			  mexErrMsgTxt("Error creating internal buffer.");
+			  return; /* Unnecessary, but for consistency ... */
+		     }
+
+		     /* Setup the structure array to be used as return argument. */
+		     plhs[0] = pStructArray;
+
+		     mxSetField( pStructArray, 0, "IsOpenForReading" , pIsOpenForReading );
+		     mxSetField( pStructArray, 0, "IsOpenForWriting" , pIsOpenForWriting );
+		     mxSetField( pStructArray, 0, "IsPaInitialzed" ,   pIsPaInitialzed );
+		     mxSetField( pStructArray, 0, "errPa" ,            pPaError);
+		     mxSetField( pStructArray, 0, "SampleRate" ,       pSampleRate );
+		     mxSetField( pStructArray, 0, "ChannelsIn" ,       pChannelsIn );
+		     mxSetField( pStructArray, 0, "ChannelsOut" ,      pChannelsOut  );
+		     mxSetField( pStructArray, 0, "BlockSize" ,        pBlockSize );
+		}
 
 	}
 	else
