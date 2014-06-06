@@ -1,5 +1,10 @@
 function compile_msound_mac
 
+% Msound relies on the PortAudio library for audio recording and playback. 
+% The library has to be present and linked properly on your system. If you
+% haven't built the library yet, please consult the official guide or do so
+% by using the awesome homebrew package manager: 'brew install portaudio'.
+
 % The more recent versions of MATLAB (Version 7.3.0.267 (R2006b) and later)
 % use a slightly modified external interfaces API, which is not compatible
 % with older MATLAB versions. If the following flag evaluates true, msound
@@ -24,7 +29,7 @@ if( ~verLessThan('matlab','7.3') )
         szArrayDims = '-compatibleArrayDims';
     else
         szArrayDims = '-largeArrayDims';
-end
+    end
 end
 
-mex(szArrayDims, ['-I' szIncludeDir], ['-l' szLibName], szSourceFile);
+mex(szArrayDims, ['-I' szIncludeDir], ['-l' szLibName], szSourceFile);
