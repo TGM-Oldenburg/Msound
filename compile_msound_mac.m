@@ -8,13 +8,6 @@ function compile_msound_mac
 % may not always be compatible.
 bOldMexApi = false;
 
-% Msound uses the open source library PortAudio which supports various
-% operating systems and audio APIs. For Mac systems the default audio
-% API is CoreAudio. CoreAudio is the default configuration of msound,
-% wich should compile on almost any MATLAB system using the installed
-% GCC compiler.
-bCoreAudio = true;
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('Building msound ...')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
