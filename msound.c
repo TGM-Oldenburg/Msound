@@ -827,8 +827,8 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		const double *pdMatlabData     = NULL; /* Matlab double data. */
 		float        *pfPortAudioData  = NULL; /* PortAudio float data. */
 
-		mwIndex i = 0; /* Just a counter. */
-		mwIndex j = 0; /* Just a counter. */
+		mwIndex c = 0; /* Just a counter. */
+		mwIndex f = 0; /* Just a counter. */
 
 		/* Delete the command string, in case we won't get another chance.*/
 		mxFree( szCommand );
@@ -915,9 +915,9 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		}
 
 		/* Convert matlab data to PortAudio format. */
-		for(int c=0; c<msound.iChannelsOut; ++c)
+		for(c=0; c<msound.iChannelsOut; ++c)
 		{
-			for(int f=0; f<mrows; ++f)
+			for(f=0; f<mrows; ++f)
 			{
                 pfPortAudioData[f*msound.iChannelsOut+c] = (float) pdMatlabData[c*iBlockSizeCur+f];
             }
@@ -979,7 +979,8 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		float  *pfPortAudioData  = NULL; /* PortAudio float data. */
 		float **ppfPortAudioData = NULL; /* PortAudio float data. */
 
-		mwIndex i = 0; /* Just a counter. */
+		mwIndex c = 0; /* Just a counter. */
+        mwIndex f = 0; /* Just a counter. */
 
 		/* Delete the command string, in case we won't get another
 		 * chance. */
@@ -1095,8 +1096,8 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		pdMatlabData = mxGetPr( plhs[0] );
 
 		/* Convert PortAudio data to matlab format */
-		for(int f=0; f<iBlockSizeCur; ++f) {
-            for(int c=0; c<msound.iChannelsIn; ++c) {
+		for(f=0; f<iBlockSizeCur; ++f) {
+            for(c=0; c<msound.iChannelsIn; ++c) {
                 pdMatlabData[c*iBlockSizeCur+f] = (double) pfPortAudioData[f*msound.iChannelsIn+c];
             }
         }
