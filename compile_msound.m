@@ -56,11 +56,13 @@ szPaths = addPath( szPaths, 'portaudio/src/os/win'                     );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_allocation.c'     );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_converters.c'     );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_cpuload.c'        );
+szFiles = addFile( szFiles, 'portaudio/src/common/pa_debugprint.c'     );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_dither.c'         );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_front.c'          );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_process.c'        );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_skeleton.c'       );
+szFiles = addFile( szFiles, 'portaudio/src/common/pa_ringbuffer.c'     );
 szFiles = addFile( szFiles, 'portaudio/src/common/pa_stream.c'         );
+szFiles = addFile( szFiles, 'portaudio/src/common/pa_trace.c'          );
 
 % Host
 szFiles = addFile( szFiles, 'portaudio/src/os/win/pa_win_hostapis.c'   );
@@ -76,9 +78,9 @@ if( bWmme )
     szFiles = addFile( szFiles, 'portaudio/src/hostapi/wmme/pa_win_wmme.c' );
     % Libs
     szFiles = addFile( szFiles, 'winmm.lib' );
-else
+
     % Required defines to compile 'pa_win_hostapis.c'
-    szDefines = addDefine( szDefines, 'PA_NO_WMME' );
+    szDefines = addDefine( szDefines, 'PA_USE_WMME' );
 end
 % szFiles = addFile( szFiles, fullfile( szLccLibPath, 'winmm.lib' ) );
 szFiles = addFile( szFiles, 'winmm.lib' );
@@ -107,9 +109,9 @@ if( bAsio )
     szFiles = addFile( szFiles, 'ole32.lib' );
     % Symbols: GetDesktopWindow, CharLowerBuffA
     szFiles = addFile( szFiles, 'user32.lib' );
-else
+
     % Required defines to compile 'pa_win_hostapis.c'
-    szDefines = addDefine( szDefines, 'PA_NO_ASIO' );
+    szDefines = addDefine( szDefines, 'PA_USE_ASIO' );
 end
 
 
@@ -124,9 +126,9 @@ if( bDS )
     % DirectX SDK
     szPaths = addPath( szPaths, 'DirectXSDK61/include'       );
     szFiles = addFile( szFiles, 'DirectXSDK61/lib/dsound.lib' );
-else
+
     % Required defines to compile 'pa_win_hostapis.c'
-    szDefines = addDefine( szDefines, 'PA_NO_DS' );
+    szDefines = addDefine( szDefines, 'PA_USE_DS' );
 end
 
 
