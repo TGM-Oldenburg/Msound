@@ -18,9 +18,12 @@ disp('Building msound ...')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 szSourceFile    = 'msound.c';
-szLibName       = 'portaudio';
+szOSversion     = '10.9';
 szIncludeDir    = '/usr/local/include';
+szLibName       = 'portaudio';
+szChar16        = 'char16_t=UINT16_T';
 szArrayDims     = '';
+
 
 % Use the old MATLAB C API on newer MATLAB versions.
 if( ~verLessThan('matlab','7.3') )
@@ -32,4 +35,5 @@ if( ~verLessThan('matlab','7.3') )
     end
 end
 
-mex(szArrayDims, ['-I' szIncludeDir], ['-l' szLibName], szSourceFile);
+mex(szArrayDims, ['-I' szIncludeDir], ['-l' szLibName], ['-D' szChar16], ...
+    szSourceFile);
