@@ -58,22 +58,8 @@ end
 szFiles = addFile( szFiles, 'msound.c' );
 
 % Add basic PortAudio include paths and files.
-szPaths = addPath( szPaths, 'portaudio/include'                        );
-szPaths = addPath( szPaths, 'portaudio/src/common'                     );
-szPaths = addPath( szPaths, 'portaudio/src/os/unix'                    );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_allocation.c'     );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_converters.c'     );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_cpuload.c'        );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_debugprint.c'     );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_dither.c'         );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_front.c'          );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_process.c'        );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_skeleton.c'       );
-szFiles = addFile( szFiles, 'portaudio/src/common/pa_stream.c'         );
-
-% Host
-szFiles = addFile( szFiles, 'portaudio/src/os/unix/pa_unix_hostapis.c' );
-szFiles = addFile( szFiles, 'portaudio/src/os/unix/pa_unix_util.c'     );
+szPaths = addPath( szPaths, '/usr/include' );
+szLibs  = addLib(  szLibs,  'portaudio'    );
 
 
 % Add PortAudio path for: Open Sound System
@@ -82,9 +68,6 @@ if( bOss )
     % Required defines to compile with OSS support.
     szDefines = addDefine( szDefines, 'PA_USE_OSS'           );
     szDefines = addDefine( szDefines, 'HAVE_SYS_SOUNDCARD_H' );
-    % PortAudio
-    szPaths = addPath( szPaths, 'portaudio/src/hostapi/oss'               );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/oss/pa_unix_oss.c' );
 end
 
 
@@ -93,9 +76,6 @@ if( bAlsa )
     disp('    Using ''Advanced Linux Sound Architecture API'' ...')
     % Required defines to compile with ALSA support.
     szDefines = addDefine( szDefines, 'PA_USE_ALSA' );
-    % PortAudio
-    szPaths = addPath( szPaths, 'portaudio/src/hostapi/alsa'                 );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/alsa/pa_linux_alsa.c' );
     % Libs
     szLibs  = addLib ( szLibs , 'asound' );
 end
@@ -106,10 +86,6 @@ if( bJack )
     disp('    Using ''Jack Audio Connection Kit API'' ...')
     % Required defines to compile with JACK support.
     szDefines = addDefine( szDefines, 'PA_USE_JACK' );
-    % PortAudio
-    szFiles = addFile( szFiles, 'portaudio/src/common/pa_ringbuffer.c' );
-    szPaths = addPath( szPaths, 'portaudio/src/hostapi/jack'           );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/jack/pa_jack.c' );
     % Libs
     szLibs  = addLib ( szLibs , 'jack'    );
     % Do we need these Libs, too?
