@@ -91,15 +91,16 @@ if( bAsio )
     disp('    Using ''Steinberg Audio Stream Input/Output API'' ...')
     % PortAudio
     szFiles = addFile( szFiles, 'portaudio/src/common/pa_ringbuffer.c'   );
+    szFiles = addFile( szFiles, 'portaudio/src/os/win/pa_win_coinitialize.c');
     szPaths = addPath( szPaths, 'portaudio/src/hostapi/asio'             );
     szFiles = addFile( szFiles, 'portaudio/src/hostapi/asio/pa_asio.cpp' );
     % ASIO-SDK
     szPaths = addPath( szPaths, 'ASIOSDK2/common'                        );
     szPaths = addPath( szPaths, 'ASIOSDK2/host'                          );
     szPaths = addPath( szPaths, 'ASIOSDK2/host/pc'                       );
-    szFiles = addFile( szFiles, 'Asiosdk2/common/asio.cpp'               );
-    szFiles = addFile( szFiles, 'Asiosdk2/host/asiodrivers.cpp'          );
-    szFiles = addFile( szFiles, 'Asiosdk2/host/pc/asiolist.cpp'          );
+    szFiles = addFile( szFiles, 'ASIOSDK2/common/asio.cpp'               );
+    szFiles = addFile( szFiles, 'ASIOSDK2/host/asiodrivers.cpp'          );
+    szFiles = addFile( szFiles, 'ASIOSDK2/host/pc/asiolist.cpp'          );
     % Libs
     % Symbols: RegCloseKey, RegQueryValueExA, RegEnumKeyA, RegOpenKeyExA,
     %          RegOpenKeyA
