@@ -3336,7 +3336,7 @@ void msoundUsage(void)
 	          "    blocked until system reboot.\n"
 	          "\n");
 
-	mexPrintf("state = msound( 'verbose', X )\n"
+	mexPrintf("msound( 'verbose', X )\n"
 	          "    Toggle verbose state, whereas \"X\" represents the desired verbose level.\n"
 	          "    If MSOUND is in verbose mode, some additional (debug) information is\n"
 	          "    displayed during use. The verbose level controls the amount of details\n"
@@ -3346,10 +3346,6 @@ void msoundUsage(void)
 	          "    for debugging the MSOUND MEX-file. Using a verbose level of 0 disables\n"
 	          "    verbose mode, which is also the default setting. If \"X\" is omitted, it\n"
 	          "    defaults to level 1.\n"
-	          "    The output argument returns MSOUND's state of initialization in a struct.\n"
-	          "    It can be used to identify the requirement of using terminate access\n"
-	          "    to the hardware or whether opening is necessary (when MSOUND was already\n"
-	          "    initialized before).\n"
 	          "\n");
 
 	mexPrintf("MSOUND v" MSOUND_VERSION_STR " (" MSOUND_VERSION_DATE ")\n"
