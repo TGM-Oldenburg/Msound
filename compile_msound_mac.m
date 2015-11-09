@@ -1,13 +1,5 @@
 function compile_msound_mac
 
-% The more recent versions of MATLAB (Version 7.3.0.267 (R2006b) and later)
-% use a slightly modified external interfaces API, which is not compatible
-% with older MATLAB versions. If the following flag evaluates true, msound
-% will be compiled using the old API. So it may possibly work with an older
-% MATLAB version. But when it comes to MEX-Files different MATLAB versions
-% may not always be compatible.
-bOldMexApi = false;
-
 % Msound uses the open source library PortAudio which supports various
 % operating systems and audio APIs. For Mac systems the default audio
 % API is CoreAudio. CoreAudio is the default configuration of msound,
@@ -26,16 +18,6 @@ szFiles   = '';
 szLibs    = '';
 
 szOptions = sprintf( '%s %s', szOptions, '-output msound' );
-
-% Use the old MATLAB C API on newer MATLAB versions.
-if( ~verLessThan('matlab','7.3') )
-    if( bOldMexApi )
-        % Use backward compatible old MATLAB C API
-        szOptions = sprintf( '%s %s', szOptions, '-compatibleArrayDims' );
-    else
-        szOptions = sprintf( '%s %s', szOptions, '-largeArrayDims'      );
-    end
-end
 
 % Add main file.
 szFiles = addFile( szFiles, 'msound.c' );
