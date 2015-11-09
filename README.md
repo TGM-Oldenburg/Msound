@@ -16,7 +16,7 @@ After a device has been used by MSOUND it must be closed by calling `MSOUND('clo
 The typical MSOUND usage is `[...] = MSOUND( 'command' [, ...] )`. MSOUND's first input argument is a string, repesenting the command to be executed. Wheras some command require additional input and/or output argument to be present. You may type `MSOUND('help')` to display a list of available commands and required parameters. For the sake of completeness the available command are listed below aswell.
 
 
-### msound( 'deviceInfo' )
+### msound( 'deviceInfo')
 ```matlab
 msound( 'deviceInfo' )
 ```
@@ -63,7 +63,7 @@ Returns a struct array `stDevices` containing detailed information for the devic
 
 Returns a data struct `stDevice` containing detailed information for the device specified by its device ID `deviceID`, whereas the second output argument `defaultIDs` contains the IDs of the default input (first element) and default output (second element) device.
 
-### msound('openRead')
+### msound( 'openRead')
 
 ```matlab
 msound( 'openRead' )
@@ -83,7 +83,7 @@ Open a specific device for recording audio data of specified format. The argumen
 
 The `latency` input argument may be used to suggest a specific audio processing latency in seconds. If omitted or empty, MSOUND will choose an appropriate default latency. While the input argument is merely a suggestion, the output argument represents an estimation of the actual audio processing latency in seconds, which may be different from the suggestion.  In case of error the returned latency will be zero.
 
-### msound('openWrite')
+### msound( 'openWrite')
 
 ```matlab
 msound( 'openWrite' )
@@ -105,7 +105,7 @@ The `latency` input argument may be used to suggest a specific audio processing 
 
 In case of error the returned latency will be zero.
 
-### msound('openRW')
+### msound( 'openRW')
 
 ```matlab
 msound( 'openRW' )
@@ -126,7 +126,7 @@ Open the specific device(s) for duplex play-back and recording of some audio dat
 While the input argument is merely a suggestion, the output argument represents an estimation of the actual audio processing latency in seconds, which may be different from the suggestion. In case of error the returned latency will be zero. This argument may also be a two element vector; input latency followed by output latency. The returned latency is always a two element row vector.
 
 
-### msound('getSamples')
+### msound( 'getSamples')
 
 ```matlab
 dataIn = msound( 'getSamples' )
@@ -141,7 +141,7 @@ dataIn = msound( 'getSamples', numSampleFrames )
 Gets samples from recording queue and returns them in a `numSampleFrames`-by-`numChannels` matrix `dataIn`.
 
 
-### msound('putSamples')
+### msound( 'putSamples')
 
 ```matlab
 msound( 'putSamples', dataOut )
@@ -150,7 +150,7 @@ msound( 'putSamples', dataOut )
 Puts the `blockSize`-by-`numChannels` matrix `dataIn` into queue for play-back. Note, this function works `X`-by-`numChannels` matrices as well, but there might be some zero-padding in case `X` doesn't match an exact integer multiply of `blockSize`.
 
 
-### msound('stop')
+### msound( 'stop')
 
 ```matlab
 msound( 'stop' )
@@ -159,7 +159,7 @@ msound( 'stop' )
 Wait until all buffers have been consumed, stop audio processing, close the audio device(s), and terminate audio hardware access. This is a very important step after using MSOUND. If MSOUND isn't terminated properly, some audio devices may become blocked until system reboot.
 
 
-### msound('close')
+### msound( 'close')
 
 ```matlab
 msound( 'close' )
@@ -168,7 +168,7 @@ msound( 'close' )
 Abort audio processing immediately, close the device(s), and terminate audio hardware access. This is a very important step after using MSOUND. If MSOUND isn't terminated properly, audio devices may become some blocked until system reboot.
 
 
-### msound('verbose')
+### msound( 'verbose')
 
 ```matlab
 msound( 'verbose', X )
