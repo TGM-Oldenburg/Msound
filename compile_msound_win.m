@@ -1,4 +1,4 @@
-function compile_msound
+function compile_msound_win
 
 % The more recent versions of MATLAB (Version 7.3.0.267 (R2006b) and later)
 % use a slightly modified external interfaces API, which is not compatible
