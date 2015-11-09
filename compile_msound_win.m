@@ -118,11 +118,6 @@ end
 eval( [ 'mex', szOptions, szDefines, szPaths, szFiles ] );
 
 
-% Call msound to see it doesn't crash... ;-)
-% msound
-
-
-
 function szCmd = addFile  ( szCmd, szFile )
     szCmd = sprintf( '%s %s'  , szCmd, szFile );
 function szCmd = addPath  ( szCmd, szPath )
