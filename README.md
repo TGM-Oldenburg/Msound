@@ -1,7 +1,7 @@
 MSOUND
 ======
 
-MSOUND is a audio interface for MATLAB that allows you to access your system's sound devices via a unified interface for all major operating systems: via Microsoft Windows Multi Media Extension (MME) or Steinberg Audio Streaming Input Output (ASIO) drivers on Windows, via Advanced Linux Sound Architecture (ALSA) or Open Sound System (OSS) on Linux, and via Core Audio (CA) on Mac OS X.
+MSOUND is a audio interface for MATLAB that allows you to access your system's sound devices via a unified interface for all major operating systems: via Microsoft Windows Multi Media Extension (MME), Steinberg Audio Streaming Input Output (ASIO) drivers, or Windows Audio Session API (WASAPI) on Windows, via Advanced Linux Sound Architecture (ALSA) or Open Sound System (OSS) on Linux, and via Core Audio (CA) on Mac OS X.
 
 ## Outline
 
