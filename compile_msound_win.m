@@ -1,4 +1,4 @@
-function compile_msound
+function compile_msound_win
 
 % The more recent versions of MATLAB (Version 7.3.0.267 (R2006b) and later)
 % use a slightly modified external interfaces API, which is not compatible
@@ -21,8 +21,12 @@ bWmme = true;
 % requirements are met, the following flag may be set to true.
 bAsio = false; % Requires ASIO SDK 2.2
 
-% To be implemented, i.e. currently not properly supported by PortAudio.
-bDS   = false; % Requires DirectX SDK version 5.x to 9.x. Experimental!
+% Msound can also be compiled using Microsoft's newest audio API, Windows
+% Audio Sessions (WASAPI). WASAPI provides a modern low-latency interface
+% to audio hardware and is therefore favorable over MME if ASIO is not an
+% option. WASAPI requires a few of Microsoft's official headers which may
+% require you to use the Visual Studio compiler in MEX.
+bWASAPI = false;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -116,20 +120,16 @@ if( bAsio )
 end
 
 
-% Add PortAudio path for: DirectSound API
-if( bDS )
-    disp('    Using ''Microsoft DirectSound API'' ...')
-%     warning('DirectSound API not fully implemented / tested, yet!');
+% Add PortAudio path for: Windows Audio Session API
+if( bWASAPI )
+    disp('    Using ''Microsoft Windows Audio Session API'' ...')
     % PortAudio
-    szPaths = addPath( szPaths, 'portaudio/src/hostapi/dsound'                     );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/dsound/pa_win_ds.c'         );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/dsound/pa_win_ds_dynlink.c' );
-    % DirectX SDK
-    szPaths = addPath( szPaths, 'DirectXSDK61/include'       );
-    szFiles = addFile( szFiles, 'DirectXSDK61/lib/dsound.lib' );
+    szFiles = addFile( szFiles, 'portaudio/src/os/win/pa_win_coinitialize.c'  );
+    szPaths = addPath( szPaths, 'portaudio/src/hostapi/wasapi'                );
+    szFiles = addFile( szFiles, 'portaudio/src/hostapi/wasapi/pa_win_wasapi.c');
 
     % Required defines to compile 'pa_win_hostapis.c'
-    szDefines = addDefine( szDefines, 'PA_USE_DS' );
+    szDefines = addDefine( szDefines, 'PA_USE_WASAPI' );
 end
 
 
