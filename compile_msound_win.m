@@ -1,12 +1,4 @@
-function compile_msound
-
-% The more recent versions of MATLAB (Version 7.3.0.267 (R2006b) and later)
-% use a slightly modified external interfaces API, which is not compatible
-% with older MATLAB versions. If the following flag evaluates true, msound
-% will be compiled using the old API. So it may possibly work with an older
-% MATLAB version. But when it comes to MEX-Files different MATLAB versions
-% may not always be compatible.
-bOldMexApi = false;
+function compile_msound_win
 
 % Msound uses the open source library PortAudio which supports various
 % operating systems and audio APIs. For Windows systems the default audio
@@ -21,9 +13,12 @@ bWmme = true;
 % requirements are met, the following flag may be set to true.
 bAsio = false; % Requires ASIO SDK 2.2
 
-% To be implemented, i.e. currently not properly supported by PortAudio.
-bDS   = false; % Requires DirectX SDK version 5.x to 9.x. Experimental!
-
+% Msound can also be compiled using Microsoft's newest audio API, Windows
+% Audio Sessions (WASAPI). WASAPI provides a modern low-latency interface
+% to audio hardware and is therefore favorable over MME if ASIO is not an
+% option. WASAPI requires a few of Microsoft's official headers which may
+% require you to use the Visual Studio compiler in MEX.
+bWASAPI = false;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('Building msound ...')
@@ -35,16 +30,6 @@ szPaths   = '';
 szFiles   = '';
 
 szOptions = sprintf( '%s %s', szOptions, '-output msound' );
-
-% Use the old MATLAB C API on newer MATLAB versions.
-if( ~verLessThan('matlab','7.3') )
-    if( bOldMexApi )
-        % Use backward compatible old MATLAB C API
-        szOptions = sprintf( '%s %s', szOptions, '-compatibleArrayDims' );
-    else
-        szOptions = sprintf( '%s %s', szOptions, '-largeArrayDims'      );
-    end
-end
 
 % Add main file.
 szFiles = addFile( szFiles, 'msound.c' );
@@ -91,15 +76,16 @@ if( bAsio )
     disp('    Using ''Steinberg Audio Stream Input/Output API'' ...')
     % PortAudio
     szFiles = addFile( szFiles, 'portaudio/src/common/pa_ringbuffer.c'   );
+    szFiles = addFile( szFiles, 'portaudio/src/os/win/pa_win_coinitialize.c');
     szPaths = addPath( szPaths, 'portaudio/src/hostapi/asio'             );
     szFiles = addFile( szFiles, 'portaudio/src/hostapi/asio/pa_asio.cpp' );
     % ASIO-SDK
     szPaths = addPath( szPaths, 'ASIOSDK2/common'                        );
     szPaths = addPath( szPaths, 'ASIOSDK2/host'                          );
     szPaths = addPath( szPaths, 'ASIOSDK2/host/pc'                       );
-    szFiles = addFile( szFiles, 'Asiosdk2/common/asio.cpp'               );
-    szFiles = addFile( szFiles, 'Asiosdk2/host/asiodrivers.cpp'          );
-    szFiles = addFile( szFiles, 'Asiosdk2/host/pc/asiolist.cpp'          );
+    szFiles = addFile( szFiles, 'ASIOSDK2/common/asio.cpp'               );
+    szFiles = addFile( szFiles, 'ASIOSDK2/host/asiodrivers.cpp'          );
+    szFiles = addFile( szFiles, 'ASIOSDK2/host/pc/asiolist.cpp'          );
     % Libs
     % Symbols: RegCloseKey, RegQueryValueExA, RegEnumKeyA, RegOpenKeyExA,
     %          RegOpenKeyA
@@ -115,30 +101,21 @@ if( bAsio )
 end
 
 
-% Add PortAudio path for: DirectSound API
-if( bDS )
-    disp('    Using ''Microsoft DirectSound API'' ...')
-%     warning('DirectSound API not fully implemented / tested, yet!');
+% Add PortAudio path for: Windows Audio Session API
+if( bWASAPI )
+    disp('    Using ''Microsoft Windows Audio Session API'' ...')
     % PortAudio
-    szPaths = addPath( szPaths, 'portaudio/src/hostapi/dsound'                     );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/dsound/pa_win_ds.c'         );
-    szFiles = addFile( szFiles, 'portaudio/src/hostapi/dsound/pa_win_ds_dynlink.c' );
-    % DirectX SDK
-    szPaths = addPath( szPaths, 'DirectXSDK61/include'       );
-    szFiles = addFile( szFiles, 'DirectXSDK61/lib/dsound.lib' );
+    szFiles = addFile( szFiles, 'portaudio/src/os/win/pa_win_coinitialize.c'  );
+    szPaths = addPath( szPaths, 'portaudio/src/hostapi/wasapi'                );
+    szFiles = addFile( szFiles, 'portaudio/src/hostapi/wasapi/pa_win_wasapi.c');
 
     % Required defines to compile 'pa_win_hostapis.c'
-    szDefines = addDefine( szDefines, 'PA_USE_DS' );
+    szDefines = addDefine( szDefines, 'PA_USE_WASAPI' );
 end
 
 
 % Build msound MEX-file using default compiler.
 eval( [ 'mex', szOptions, szDefines, szPaths, szFiles ] );
-
-
-% Call msound to see it doesn't crash... ;-)
-% msound
-
 
 
 function szCmd = addFile  ( szCmd, szFile )

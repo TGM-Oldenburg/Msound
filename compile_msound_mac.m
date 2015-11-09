@@ -1,5 +1,10 @@
 function compile_msound_mac
 
+% Msound uses the open source library PortAudio which supports various
+% operating systems and audio APIs. Mac OS X is completely build around a
+% single audio API which is Core Audio. Therefore no selection of APIs
+% exists for the Mac.
+
 eval(['mex ', ...
       '-output msound ' ...
       '-Dchar16_t=UINT16_T ' ...

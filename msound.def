@@ -1,2 +1,0 @@
-LIBRARY msound.mexw32
-EXPORTS mexFunction
