@@ -177,6 +177,13 @@ msound( 'verbose', X )
 Toggle verbose state, whereas `X` represents the desired verbose level. If MSOUND is in verbose mode, some additional (debug) information is displayed during use. The verbose level controls the amount of details to be displayed. Level 1 shows some basic messages that might be of interest for debugging m-files using MSOUND. Level 2 on the other hand seems a little over the top for everyday use but it can be very useful for debugging the MSOUND MEX-file. Using a verbose level of 0 disables verbose mode, which is also the default setting. If `X` is omitted, it defaults to level 1.
 
 
+```matlab
+state = msound( 'verbose', X )
+```
+
+The output argument returns MSOUND's state of initialization in a struct. It can be used to identify the requirement of using terminate access to the hardware or whether opening is necessary (when MSOUND was already initialized before).
+
+
 ## License
 
 Copyright 2009  S. Fischer
