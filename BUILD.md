@@ -39,3 +39,32 @@ Now you are ready to just execute `compile_msound_linux.m` in MATLAB and you're 
 * MATLAB 2015a
 * gcc v5.2.1
 * `portaudio19-dev` via apt-get
+
+
+
+## Compiling on Mac OS X
+
+Compiling on OS X depends on the PortAudio library being installed system-wide. As the official SVN version includes at least one known bug on the Mac, there is a fork of PortAudio. It is strongly advised to compile that version of the library. Compiling requires `libtool` and `autoconf` to be installed. Compiling can be done as follows:
+
+```bash
+# 1.) Clone the latest version of forked PortAudio
+git clone https://github.com/Janwillhaus/forked-portaudio.git
+cd forked-portaudio
+
+# 2.) Bootstrap and configure
+autoreconf -if
+./configure
+
+# 3.) Compile and install
+make
+sudo make install
+```
+
+Step 3 causes the portaudio library to be installed system-wide upon which Msound is simply compiled by executing `compile_msound_mac.m` in MATLAB.
+
+**Our build environment:**
+
+* OS X 10.11 El Capitan
+* MATLAB 2015b ([patched](http://www.mathworks.com/matlabcentral/answers/246507-why-can-t-mex-find-a-supported-compiler-in-matlab-r2015b-after-i-upgraded-to-xcode-7))
+* Xcode 7.1
+
