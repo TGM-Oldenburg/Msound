@@ -3,6 +3,26 @@ MSOUND
 
 MSOUND is a audio interface for MATLAB that allows you to access your system's sound devices via a unified interface for all major operating systems: via Microsoft Windows Multi Media Extension (MME), Steinberg Audio Streaming Input Output (ASIO) drivers, or Windows Audio Session API (WASAPI) on Windows, via Advanced Linux Sound Architecture (ALSA) or Open Sound System (OSS) on Linux, and via Core Audio (CA) on Mac OS X.
 
+
+**Table of Contents**
+
+- [Outline](#outline)
+- [Usage details](#usage-details)
+	- [msound( 'deviceInfo')](#msound-deviceinfo)
+	- [msound( 'openRead')](#msound-openread)
+	- [msound( 'openWrite')](#msound-openwrite)
+	- [msound( 'openRW')](#msound-openrw)
+	- [msound( 'getSamples')](#msound-getsamples)
+	- [msound( 'putSamples')](#msound-putsamples)
+	- [msound( 'stop')](#msound-stop)
+	- [msound( 'close')](#msound-close)
+	- [msound( 'verbose')](#msound-verbose)
+- [Examples](#examples)
+  - [Basic audio output](#basic-audio-output)
+  - [Basic audio input](#basic-audio-input)
+  - [Advanced simultaneous audio input/output](#advanced-simultaneous-audio-inputoutput)
+- [License](#license)
+
 ## Outline
 
 Every installed audio device is identified by a unique device ID, which must be specified when using such a device. Whereas these IDs vary from system to system, the device ID 0 always corresponds to your system's default audio device. Some devices are capable of playback, while others may be used for recording, only. You may display a list of supported devices by typing the command `MSOUND('deviceInfo')`.
@@ -182,6 +202,21 @@ state = msound( 'verbose', X )
 ```
 
 The output argument returns MSOUND's state of initialization in a struct. It can be used to identify the requirement of using terminate access to the hardware or whether opening is necessary (when MSOUND was already initialized before).
+
+
+## Examples
+
+### Basic audio output
+
+TBD
+
+### Basic audio input
+
+TBD
+
+### Advanced simultaneous audio input/output
+
+TBD
 
 
 ## License
