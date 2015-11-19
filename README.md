@@ -238,4 +238,4 @@ This library is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-Visit http://www.gnu.org/licenses or see provided "lgpl-2.1.txt" file for more information.
+Visit http://www.gnu.org/licenses or see provided `LICENSE.md` file for more information.
