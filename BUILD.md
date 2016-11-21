@@ -44,9 +44,12 @@ Now you are ready to just execute `compile_msound_linux.m` in MATLAB and you're 
 
 ## Compiling on Mac OS X
 
-Compiling on OS X depends on the PortAudio library being installed system-wide. As the official SVN version includes at least one known bug on the Mac, there is a fork of PortAudio. It is strongly advised to compile that version of the library, and do it *statically* (i.e. configure with `--disable-shared`). Compiling requires `libtool` and `autoconf` to be installed. Compiling can be done as follows:
+Compiling on OS X depends on the PortAudio library being installed system-wide. As the official SVN version includes at least one known bug on the Mac, there is a fork of PortAudio. It is strongly advised to compile that version of the library, and do it *statically* (i.e. configure with `--disable-shared`). Compiling requires `libtool`, `automake`, and `autoconf` to be installed. It is advised (and explained) to use [homebrew](http://brew.sh/) to get these dependencies. Compiling can be done as follows:
 
 ```bash
+# 0.) Install dependencies via brew
+brew install libtool automake autoconf
+
 # 1.) Clone the latest version of forked PortAudio
 git clone https://tgm-git.jade-hs.de/janwillhaus/forked-portaudio.git
 cd forked-portaudio
