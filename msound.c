@@ -1358,6 +1358,8 @@ void mexFunction(int nlhs,       mxArray *plhs[],
 		{
 			mexPrintf(MSOUND_VERBOSE "MSOUND v" MSOUND_VERSION_STR
 			          " (" MSOUND_VERSION_DATE ")\n"              );
+			mexPrintf(MSOUND_VERBOSE "Compile Time " __DATE__ ", "
+			          __TIME__ "\n"                               );
 		}
 
 		/* Return string. */
@@ -3353,6 +3355,7 @@ void msoundUsage(void)
 	          "\n");
 
 	mexPrintf("MSOUND v" MSOUND_VERSION_STR " (" MSOUND_VERSION_DATE ")\n"
+	          "Compile Time " __DATE__ ", " __TIME__ "\n"
 	          "Copyright (c) 2004-2009  S. Fischer, M. Hansen, J. Bitzer,\n"
 	          "Institute of Hearing Technology and Audiology (IHA) at the\n"
 	          "University of Applied Sciences Wilhelmshaven/Oldenburg/Elsfleth\n"
