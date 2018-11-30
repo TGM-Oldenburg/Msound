@@ -51,7 +51,7 @@ Compiling on OS X depends on the PortAudio library being installed system-wide. 
 brew install libtool automake autoconf
 
 # 1.) Clone the latest version of forked PortAudio
-git clone https://tgm-git.jade-hs.de/janwillhaus/forked-portaudio.git
+git clone https://tgm-git.jade-hs.de/others/forked-portaudio.git
 cd forked-portaudio
 
 # 2.) Bootstrap and configure
