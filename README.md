@@ -5,6 +5,9 @@ MSOUND is a audio interface for MATLAB that allows you to access your system's s
 
 **For end-users of Msound is it highly advised to just download the [latest release binaries](https://github.com/TGM-Oldenburg/Msound/releases/latest), making it unnecessary to compile Msound from scratch. Only if you encounter problems using Msound, you might have to re-compile it locally on your machine. Instructions on how to compile Msound on different platforms can be found in [BUILD.md](BUILD.md).**
 
+## Compiling Issues
+- **Error using mex gcc: error: winmm.lib: No such file or directory** get winmm.lib (e.g. from here https://github.com/tpn/winsdk-7/blob/master/v7.1A/Lib/x64/WinMM.Lib) and store it in your MSOUND-Directory
+
 **Table of Contents**
 
 - [Outline](#outline)
